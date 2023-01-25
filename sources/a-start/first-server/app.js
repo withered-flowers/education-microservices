@@ -1,4 +1,7 @@
 // This is a server with DB using PostgreSQL
+// Assumption: This is a very complex apps which using express
+// (many routes / db / relations)
+
 const express = require("express");
 const {
   todoGetAll,
