@@ -129,4 +129,8 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# SQLite is used for the database file
 *.sqlite
+
+# RDB is the Redis Dump File
+*.rdb
