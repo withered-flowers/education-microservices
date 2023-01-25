@@ -2,6 +2,7 @@ const { Color } = require("../models/index");
 
 const getColor = async (_req, res, next) => {
   try {
+    // Assumption: This is a very heavy query which need a super long time duration
     const colors = await Color.findAll();
 
     await new Promise((r) => setTimeout(r, 2000));

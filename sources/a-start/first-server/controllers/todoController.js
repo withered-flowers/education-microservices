@@ -2,9 +2,10 @@ const { Todo } = require("../models/index.js");
 
 const todoGetAll = async (_req, res, next) => {
   try {
-    const todos = await Todo.findAll();
-
+    // Assumption: This is a very heavy query which need a super long time duration
     await new Promise((r) => setTimeout(r, 2000));
+
+    const todos = await Todo.findAll();
 
     res.status(200).json({
       statusCode: 200,
