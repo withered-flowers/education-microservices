@@ -2,6 +2,7 @@
 // Assumption: This is a very complex apps which using express
 // (many routes / db / relations)
 
+const cors = require("cors");
 const express = require("express");
 const {
   getColor,
@@ -13,6 +14,9 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 app
+  // Since we will use an orchestrator, we need to use cross domain.
+  // hence we need to use cors
+  .use(cors())
   .use(express.urlencoded({ extended: false }))
   .use(express.json())
   .get("/", (_req, res) => {

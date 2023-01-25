@@ -2,6 +2,7 @@
 // Assumption: This is a very complex apps which using express
 // (many routes / db / relations)
 
+const cors = require("cors");
 const express = require("express");
 const {
   todoGetAll,
@@ -12,6 +13,9 @@ const {
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Since we will use an orchestrator, we need to use cross domain.
+// hence we need to use cors
+app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
