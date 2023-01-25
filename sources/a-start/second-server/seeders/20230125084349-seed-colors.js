@@ -2,18 +2,19 @@
 
 const { faker } = require("@faker-js/faker");
 
-const TODOS_DATA_COUNT = 10;
+const COLORS_DATA_COUNT = 10;
 
-const todos = [];
+const colors = [];
 
-for (let dataCounter = 0; dataCounter < TODOS_DATA_COUNT; dataCounter++) {
-  let todo = {};
+for (let dataCounter = 0; dataCounter < COLORS_DATA_COUNT; dataCounter++) {
+  let color = {};
 
-  todo.name = faker.lorem.sentence();
-  todo.completed = faker.datatype.boolean();
-  todo.createdAt = todo.updatedAt = new Date();
+  color.name = faker.color.human();
+  color.year = faker.datatype.number({ min: 1990, max: 2050 });
+  color.color = faker.color.rgb();
+  color.createdAt = color.updatedAt = new Date();
 
-  todos.push(todo);
+  colors.push(color);
 }
 
 /** @type {import('sequelize-cli').Migration} */
@@ -29,7 +30,7 @@ module.exports = {
      * }], {});
      */
 
-    await queryInterface.bulkInsert("Todos", todos, {});
+    await queryInterface.bulkInsert("Colors", colors, {});
   },
 
   async down(queryInterface, Sequelize) {
@@ -40,6 +41,6 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
 
-    await queryInterface.bulkDelete("Todos", null, {});
+    await queryInterface.bulkDelete("Colors", null, {});
   },
 };
