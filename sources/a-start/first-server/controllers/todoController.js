@@ -4,6 +4,8 @@ const todoGetAll = async (_req, res, next) => {
   try {
     const todos = await Todo.findAll();
 
+    await new Promise((r) => setTimeout(r, 2000));
+
     res.status(200).json({
       statusCode: 200,
       data: todos,
