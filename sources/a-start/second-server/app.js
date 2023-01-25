@@ -1,4 +1,9 @@
 const express = require("express");
+const {
+  getColor,
+  putColor,
+  deleteColor,
+} = require("./controllers/colorController");
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -12,7 +17,9 @@ app
       message: "Echo success",
     });
   })
-  .get("/colors", null)
+  .get("/colors", getColor)
+  .put("/colors/:id", putColor)
+  .delete("/colors/:id", deleteColor)
   .use((err, _req, res, _next) => {
     console.log(err);
 
