@@ -43,13 +43,33 @@ app
 
       // Redis cannot save the result as an object
       // So we need to stringify it
-      const { data } = await axios.get(`${FIRST_SERVER_URL}/todos`);
+      const { data: response } = await axios.get(`${FIRST_SERVER_URL}/todos`);
 
       // If it's not cached yet, we will cache it !
-      redis.set("todo:get", JSON.stringify(data));
+      redis.set("todo:get", JSON.stringify(response));
 
-      return res.status(200).json(data);
+      return res.status(200).json(response);
     } catch (err) {
+      next(err);
+    }
+  })
+  .delete("/todos/:id", async (req, res, next) => {
+    try {
+      const { id } = req.params;
+
+      const { data: response } = await axios.delete(
+        `${FIRST_SERVER_URL}/todos/${id}`
+      );
+
+      // Because we're using cache, we need to invalidate the cache
+      // (For the user's data accuracy)
+      const keys = await redis.keys("todo:*");
+      await redis.del(keys);
+
+      res.status(200).json(response);
+    } catch (err) {
+      console.log(err);
+
       next(err);
     }
   })
@@ -62,14 +82,40 @@ app
         return res.status(200).json(colorResult);
       }
 
-      const { data } = await axios.get(`${SECOND_SERVER_URL}/colors}`);
+      const { dat: response } = await axios.get(`${SECOND_SERVER_URL}/colors}`);
 
-      redis.set("color:get", JSON.stringify(data));
+      redis.set("color:get", JSON.stringify(response));
 
-      return res.status(200).json(data);
+      return res.status(200).json(response);
     } catch (err) {
       next(err);
     }
+  })
+  .delete("/colors/:id", async (req, res, next) => {
+    try {
+      const { id } = req.params;
+
+      const { data: response } = await axios.delete(
+        `${SECOND_SERVER_URL}/colors/${id}`
+      );
+
+      // Invalidate cache
+      const keys = await redis.keys("color:*");
+      await redis.del(keys);
+
+      return res.status(200).json(response);
+    } catch (err) {
+      next(err);
+    }
+  })
+  .use((err, _req, res, _next) => {
+    console.log(err);
+
+    res.status(500).json({
+      statusCode: 500,
+      error:
+        "Something wicked happened, but error handler not implemented yet !",
+    });
   });
 
 app.listen(port, (_) => console.log(`Orchestrator is working at port ${port}`));
